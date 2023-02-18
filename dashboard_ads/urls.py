@@ -21,4 +21,10 @@ from ads import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.main),
+
+    path("cat/", views.CategoryView.as_view()),
+    path("cat/<int:pk>/", views.CategoryDetailView.as_view()),
+
+    path("ads/", views.AdsView.as_view()),
+    path("ads/<int:pk>/", views.AdsDetailView.as_view()),
 ]
