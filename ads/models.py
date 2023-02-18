@@ -20,3 +20,11 @@ class Ads(models.Model):
     description = models.TextField(max_length=1000, verbose_name='Описание', null=True)
     address = models.CharField(max_length=500, verbose_name='Адрес')
     is_published = models.BooleanField(verbose_name='Статус объявления', default=False)
+
+    class Meta:
+        verbose_name = 'Объявление'
+        verbose_name_plural = 'Объявления'
+        ordering = ['-price']
+
+    def __str__(self):
+        return self.name
