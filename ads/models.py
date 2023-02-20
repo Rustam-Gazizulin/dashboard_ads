@@ -55,7 +55,7 @@ class Ads(models.Model):
     price = models.PositiveBigIntegerField(verbose_name='Цена')
     description = models.TextField(max_length=1000, verbose_name='Описание', null=True)
     is_published = models.BooleanField(verbose_name='Статус объявления', default=False)
-    image = models.ImageField(upload_to='image/', verbose_name='Фото', null=True, blank=True)
+    image = models.ImageField(upload_to='images/', verbose_name='Фото', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория', related_name='cat')
 
     class Meta:

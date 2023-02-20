@@ -143,9 +143,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "image",
+                    "images",
                     models.ImageField(
-                        blank=True, null=True, upload_to="image/", verbose_name="Фото"
+                        blank=True, null=True, upload_to="images/", verbose_name="Фото"
                     ),
                 ),
                 (
