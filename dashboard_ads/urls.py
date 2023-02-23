@@ -27,14 +27,11 @@ router = routers.SimpleRouter()
 router.register('loc', LocationViewSet)
 router.register('cat', CategoryViewSet)
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.main),
 
     path("ads/", include('ads.urls_ads')),
-
-
     path("user/", include('ads.urls_user')),
 
 ]
