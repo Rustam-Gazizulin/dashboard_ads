@@ -15,10 +15,18 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.db import router
 from django.urls import path, include
+from rest_framework import routers
 
 from ads import views
+from ads.views import LocationViewSet, CategoryViewSet
 from dashboard_ads import settings
+
+router = routers.SimpleRouter()
+router.register('loc', LocationViewSet)
+router.register('cat', CategoryViewSet)
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -26,13 +34,12 @@ urlpatterns = [
 
     path("ads/", include('ads.urls_ads')),
 
-    path("cat/", include('ads.urls_cat')),
 
     path("user/", include('ads.urls_user')),
 
-    path("loc/", include('ads.urls_loc')),
-
 ]
+urlpatterns += router.urls
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
