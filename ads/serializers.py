@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ads.models import Location, Category, Ads
+from ads.models import Location, Category, Ads, User
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -64,6 +64,61 @@ class AdsDestroySerializer(serializers.ModelSerializer):
         fields = ['id']
 
 
+class UserSerializer(serializers.ModelSerializer):
+    location_id = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
+
+    class Meta:
+        model = User
+        fields = '__all__'
 
 
+class UserRetrieveSerializer(serializers.ModelSerializer):
+    location_id = LocationSerializer(many=True)
 
+    class Meta:
+        model = User
+        exclude = ['password']
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    location_id = serializers.SlugRelatedField(required=False, many=True, queryset=Location.objects.all(),
+                                               slug_field='name')
+
+    def is_valid(self, *, raise_exception=False):
+        self._location_id = self.initial_data.pop('location_id', [])
+        return super().is_valid(raise_exception=raise_exception)
+
+    def create(self, validated_data):
+        user = User.objects.create(**validated_data)
+
+        for loc in self._location_id:
+            location_id, _ = Location.objects.get_or_create(name=loc)
+            user.location_id.add(location_id)
+
+        return user
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'role', 'age', 'password', 'location_id']
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    location_id = serializers.SlugRelatedField(required=False, many=True, queryset=Location.objects.all(),
+                                               slug_field='name')
+
+    def is_valid(self, *, raise_exception=False):
+        self._location_id = self.initial_data.pop('location_id', [])
+        return super().is_valid(raise_exception=raise_exception)
+
+    def save(self, **kwargs):
+        user = super().save(**kwargs)
+
+        for loc in self._location_id:
+            location_id, _ = Location.objects.get_or_create(name=loc)
+            user.location_id.add(location_id)
+
+        return user
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'role', 'age', 'password', 'location_id']
