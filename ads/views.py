@@ -1,18 +1,19 @@
-import json
-
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import UpdateView
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, \
     RetrieveDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from ads.models import Category, Ads, User, Location
+from ads.models import Category, Ads, User, Location, Selection
+from ads.permissions import IsOwnerOrModerator
 from ads.serializers import LocationSerializer, CategorySerializer, AdsSerializer, AdsCreateSerializer, \
     AdsUpdateSerializer, AdsDestroySerializer, UserSerializer, UserRetrieveSerializer, UserCreateSerializer, \
-    UserUpdateSerializer
+    UserUpdateSerializer, SelectionSerializer, SelectionRetrieveSerializer, SelectionCreateSerializer, \
+    SelectionUpdateSerializer
 
 
 def main(request):
@@ -54,6 +55,7 @@ class AdsListView(ListAPIView):
 class AdsRetrieveView(RetrieveAPIView):
     queryset = Ads.objects.all()
     serializer_class = AdsSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class AdsCreateView(CreateAPIView):
@@ -64,6 +66,7 @@ class AdsCreateView(CreateAPIView):
 class AdsUpdateView(UpdateAPIView):
     queryset = Ads.objects.all()
     serializer_class = AdsUpdateSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -93,6 +96,7 @@ class AdsImageUpload(UpdateView):
 class AdsDestroyView(DestroyAPIView):
     queryset = Ads.objects.all()
     serializer_class = AdsDestroySerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
 
 class UserListView(ListAPIView):
@@ -114,6 +118,28 @@ class UserUpdateView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
 
+
+class SelectionListView(ListAPIView):
+    queryset = Selection.objects.all()
+    serializer_class = SelectionSerializer
+
+
+class SelectionRetrieveView(RetrieveDestroyAPIView):
+    queryset = Selection.objects.all()
+    serializer_class = SelectionRetrieveSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class SelectionCreateView(CreateAPIView):
+    queryset = Selection.objects.all()
+    serializer_class = SelectionCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class SelectionUpdateView(UpdateAPIView):
+    queryset = Selection.objects.all()
+    serializer_class = SelectionUpdateSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
 
 

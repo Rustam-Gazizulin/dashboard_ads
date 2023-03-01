@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -26,19 +27,14 @@ class Location(models.Model):
         return self.name
 
 
-class User(models.Model):
+class User(AbstractUser):
     STATUS = [
         ('member', 'Пользователь'),
         ('admin', 'Администратор'),
         ('moderator', 'Модератор')
     ]
-
-    first_name = models.CharField(max_length=30, verbose_name='Имя')
-    last_name = models.CharField(max_length=30, verbose_name='Фамилия')
-    username = models.CharField(max_length=30, unique=True, verbose_name='Ник')
-    password = models.CharField(max_length=50, unique=True)
     role = models.CharField(choices=STATUS, max_length=20, default='member', verbose_name='Должность')
-    age = models.PositiveSmallIntegerField(verbose_name='Возраст', null=True)
+    age = models.PositiveSmallIntegerField(verbose_name='Возраст', null=True, blank=True)
     location_id = models.ManyToManyField(Location, verbose_name='Адрес')
 
     class Meta:
@@ -62,6 +58,19 @@ class Ads(models.Model):
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявления'
         ordering = ['-price']
+
+    def __str__(self):
+        return self.name
+
+
+class Selection(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='selections')
+    name = models.CharField(max_length=50, unique=True, verbose_name='Подборка')
+    items = models.ManyToManyField(Ads)
+
+    class Meta:
+        verbose_name = 'Подборка объявлений'
+        verbose_name_plural = 'Подборки объявлений'
 
     def __str__(self):
         return self.name
