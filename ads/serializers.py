@@ -69,7 +69,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'role', 'age', 'location_id', 'birth_date', 'email']
 
 
 class UserRetrieveSerializer(serializers.ModelSerializer):
@@ -101,7 +101,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'role', 'age', 'password', 'location_id']
+        fields = ['id', 'first_name', 'last_name', 'username', 'role', 'age', 'password', 'location_id',
+                  'email', 'birth_date']
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
