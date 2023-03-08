@@ -36,3 +36,31 @@ def test_create_ads(api_client, user):
     assert response.data == expected_response
 
 
+@pytest.mark.django_db
+def test_list_ads(api_client):
+
+    url = reverse('ads_list')
+    response = api_client.get(url)
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db
+def test_retrieve_ads(api_client, ads):
+
+    expected_response = {
+        "id": ads.pk,
+        "author_id": ads.author_id,
+        "image": None,
+        "name": ads.name,
+        "price": ads.price,
+        "description": None,
+        "is_published": False,
+        "author": str(ads.author.username),
+    }
+
+    url = reverse('ads_retrieve', kwargs={"pk": ads.pk})
+    response = api_client.get(url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data == expected_response

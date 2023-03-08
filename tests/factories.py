@@ -7,11 +7,11 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
 
-    first_name = factory.Faker("first_name"),
-    last_name = factory.Faker("last_name"),
-    username = factory.Faker("user_name"),
-    email = factory.Faker("email"),
-    password = factory.Faker("password", length=10, special_chars=True, digits=True, upper_case=True, lower_case=True),
+    first_name = 'test_firstname',
+    last_name = 'test_lastname',
+    username = 'test_username',
+    email = 'test@mail.ru',
+    password = 'test123',
     birth_date = factory.Faker('date_object')
 
 
@@ -24,9 +24,9 @@ class SelectionFactory(factory.django.DjangoModelFactory):
 
 
 class AdsFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker("name", length=15)
+    name = 'testnewtest'
     author = factory.SubFactory(UserFactory)
-    price = factory.Faker('pyint', min_value=100, max_value=10000)
+    price = 12345
 
     class Meta:
         model = Ads
