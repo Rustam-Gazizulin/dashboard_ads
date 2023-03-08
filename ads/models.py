@@ -87,7 +87,7 @@ class Ads(models.Model):
     is_published = models.BooleanField(verbose_name='Статус объявления', default=False,
                                        validators=[validate_is_published])
     image = models.ImageField(upload_to='images/', verbose_name='Фото', null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория', related_name='cat')
+    category = models.ForeignKey(Category, null=True, on_delete=models.CASCADE, verbose_name='Категория', related_name='cat')
 
     class Meta:
         verbose_name = 'Объявление'
