@@ -16,7 +16,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 class SelectionFactory(factory.django.DjangoModelFactory):
-    name = 'test_name'
+    name = 'testselectionnew'
     owner = factory.SubFactory(UserFactory)
 
     class Meta:
